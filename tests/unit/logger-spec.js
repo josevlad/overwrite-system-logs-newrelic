@@ -1,10 +1,10 @@
 'use strict';
 require('dotenv').config({ path: '.env.test' });
-const { overwriteSystemLogs } = require('./../../');
+const { overwriteSystemLogsNewRelic } = require('./../../');
 const env = Object.assign({}, process.env);
 const chai = require('chai');
 const { expect } = chai;
-overwriteSystemLogs();
+overwriteSystemLogsNewRelic();
 let logger;
 
 describe('[LOGGER] test', () => {
@@ -22,23 +22,21 @@ describe('[LOGGER] test', () => {
             warn: ['new', 'warning', 'message']
         });
         const content = global.winstonLogger;
-        expect(content[0].message.messageToLog).to.eql('Info log');
+        expect(content[0].message.payload).to.eql('Info log');
         expect(content[0].message.objectType).to.eql('string');
         expect(content[0].level).to.eql('info');
 
-        expect(content[1].message.messageToLog).to.eql(
+        expect(content[1].message.payload).to.eql(
             '{"objectKey":"object message"}'
         );
         expect(content[1].message.objectType).to.eql('object');
         expect(content[1].level).to.eql('debug');
 
-        expect(content[2].message.messageToLog).to.eql(
-            'Error message'
-        );
+        expect(content[2].message.payload).to.eql('Error message');
         expect(content[2].message.objectType).to.eql('error');
         expect(content[2].level).to.eql('error');
 
-        expect(content[3].message.messageToLog).to.eql(
+        expect(content[3].message.payload).to.eql(
             '["new","warning","message"]'
         );
         expect(content[3].message.objectType).to.eql('array');
@@ -53,23 +51,21 @@ describe('[LOGGER] test', () => {
             warn: ['new', 'warning', 'message']
         });
         const content = global.winstonLogger;
-        expect(content[0].message.messageToLog).to.eql('Info log');
+        expect(content[0].message.payload).to.eql('Info log');
         expect(content[0].message.objectType).to.eql('string');
         expect(content[0].level).to.eql('info');
 
-        expect(content[1].message.messageToLog).to.eql(
+        expect(content[1].message.payload).to.eql(
             '{"objectKey":"object message"}'
         );
         expect(content[1].message.objectType).to.eql('object');
         expect(content[1].level).to.eql('debug');
 
-        expect(content[2].message.messageToLog).to.eql(
-            'Error message'
-        );
+        expect(content[2].message.payload).to.eql('Error message');
         expect(content[2].message.objectType).to.eql('error');
         expect(content[2].level).to.eql('error');
 
-        expect(content[3].message.messageToLog).to.eql(
+        expect(content[3].message.payload).to.eql(
             '["new","warning","message"]'
         );
         expect(content[3].message.objectType).to.eql('array');
@@ -83,7 +79,7 @@ describe('[LOGGER] test', () => {
             debug: obj
         });
         const content = JSON.parse(
-            global.winstonLogger[0].message.messageToLog
+            global.winstonLogger[0].message.payload
         );
         expect(content.a).to.eql(1);
     });
@@ -95,7 +91,7 @@ describe('[LOGGER] test', () => {
             debug: obj
         });
         const content = JSON.parse(
-            global.winstonLogger[0].message.messageToLog
+            global.winstonLogger[0].message.payload
         );
         expect(content.a).to.eql(1);
     });
@@ -105,7 +101,7 @@ describe('[LOGGER] test', () => {
             debug: 1
         });
         const content = global.winstonLogger[0];
-        const message = JSON.parse(content.message.messageToLog);
+        const message = JSON.parse(content.message.payload);
         const level = content.level;
         expect(message).to.eql(1);
         expect(level).to.eql('debug');
@@ -114,7 +110,7 @@ describe('[LOGGER] test', () => {
     it('Testing with level debug without object using overwrite opcion', async () => {
         console.debug(1);
         const content = global.winstonLogger[0];
-        const message = JSON.parse(content.message.messageToLog);
+        const message = JSON.parse(content.message.payload);
         const level = content.level;
         expect(message).to.eql(1);
         expect(level).to.eql('debug');
@@ -126,7 +122,7 @@ describe('[LOGGER] test', () => {
         };
         logger.debug(obj);
         const content = JSON.parse(
-            global.winstonLogger[0].message.messageToLog
+            global.winstonLogger[0].message.payload
         );
         const level = global.winstonLogger[0]['level'];
         expect(content.a).to.eql(1);
@@ -142,7 +138,7 @@ describe('[LOGGER] test', () => {
         const content = [];
         const level = global.winstonLogger[0]['level'];
         global.winstonLogger.forEach((element) => {
-            content.push(JSON.parse(element.message.messageToLog));
+            content.push(JSON.parse(element.message.payload));
         });
         expect(content[0].a).to.eql(1);
         expect(content[1]).to.eql('asd');
@@ -154,7 +150,7 @@ describe('[LOGGER] test', () => {
             debug: 1
         });
         const content = global.winstonLogger[0];
-        const message = JSON.parse(content.message.messageToLog);
+        const message = JSON.parse(content.message.payload);
         const level = content.level;
         expect(message).to.eql(1);
         expect(level).to.eql('debug');
@@ -166,7 +162,7 @@ describe('[LOGGER] test', () => {
         };
         logger.warn(obj);
         const content = JSON.parse(
-            global.winstonLogger[0].message.messageToLog
+            global.winstonLogger[0].message.payload
         );
         const level = global.winstonLogger[0]['level'];
         expect(content.a).to.eql(1);
@@ -179,9 +175,9 @@ describe('[LOGGER] test', () => {
         logger.warn(obj, obj2);
         const level = global.winstonLogger[0]['level'];
         const content1 = JSON.parse(
-            global.winstonLogger[0].message.messageToLog
+            global.winstonLogger[0].message.payload
         );
-        const content2 = global.winstonLogger[1].message.messageToLog;
+        const content2 = global.winstonLogger[1].message.payload;
         expect(content1.a).to.eql(1);
         expect(content2).to.eql('asd');
         expect(level).to.eql('warn');
@@ -193,7 +189,7 @@ describe('[LOGGER] test', () => {
         };
         logger.error(obj);
         const content = JSON.parse(
-            global.winstonLogger[0].message.messageToLog
+            global.winstonLogger[0].message.payload
         );
         const level = global.winstonLogger[0]['level'];
         expect(content.a).to.eql(1);
@@ -206,7 +202,7 @@ describe('[LOGGER] test', () => {
         };
         console.error(obj);
         const content = JSON.parse(
-            global.winstonLogger[0].message.messageToLog
+            global.winstonLogger[0].message.payload
         );
         const level = global.winstonLogger[0]['level'];
         expect(content.a).to.eql(1);
@@ -222,7 +218,7 @@ describe('[LOGGER] test', () => {
         const content = [];
         const level = global.winstonLogger[0]['level'];
         global.winstonLogger.forEach((element) => {
-            content.push(JSON.parse(element.message.messageToLog));
+            content.push(JSON.parse(element.message.payload));
         });
         expect(content[0].a).to.eql(1);
         expect(content[1]).to.eql('asd');
@@ -232,7 +228,7 @@ describe('[LOGGER] test', () => {
     it('Testing with level warn without object using overwrite opcion', async () => {
         console.warn(1);
         const content = global.winstonLogger[0];
-        const message = JSON.parse(content.message.messageToLog);
+        const message = JSON.parse(content.message.payload);
         const level = content.level;
         expect(message).to.eql(1);
         expect(level).to.eql('warn');
@@ -241,7 +237,7 @@ describe('[LOGGER] test', () => {
     it('Testing with level info without object using overwrite opcion', async () => {
         console.info(1);
         const content = global.winstonLogger[0];
-        const message = JSON.parse(content.message.messageToLog);
+        const message = JSON.parse(content.message.payload);
         const level = content.level;
         expect(message).to.eql(1);
         expect(level).to.eql('info');
@@ -253,7 +249,7 @@ describe('[LOGGER] test', () => {
         };
         logger.info(obj);
         const content = JSON.parse(
-            global.winstonLogger[0].message.messageToLog
+            global.winstonLogger[0].message.payload
         );
         const level = global.winstonLogger[0]['level'];
         expect(content.a).to.eql(1);
@@ -268,9 +264,9 @@ describe('[LOGGER] test', () => {
         logger.info(obj, obj2);
         const level = global.winstonLogger[0]['level'];
         const content1 = JSON.parse(
-            global.winstonLogger[0].message.messageToLog
+            global.winstonLogger[0].message.payload
         );
-        const content2 = global.winstonLogger[1].message.messageToLog;
+        const content2 = global.winstonLogger[1].message.payload;
         expect(content1.a).to.eql(1);
         expect(content2).to.eql('asd');
         expect(level).to.eql('info');
@@ -305,10 +301,10 @@ describe('[LOGGER] test', () => {
         });
         let content = global.winstonLogger[0];
         const { message, level } = content;
-        const messageToLog = JSON.parse(message.messageToLog);
-        expect(messageToLog.statusCode).to.eql(500);
-        expect(messageToLog.message).to.eql('NullPointer Exception');
-        expect(messageToLog.logMessage).to.eql(
+        const payload = JSON.parse(message.payload);
+        expect(payload.statusCode).to.eql(500);
+        expect(payload.message).to.eql('NullPointer Exception');
+        expect(payload.logMessage).to.eql(
             'NullPointerException at Logging NullPointer Exception'
         );
         expect(level).to.eql('error');
@@ -337,17 +333,15 @@ describe('[LOGGER] test', () => {
         });
         const content = global.winstonLogger;
         expect(content.length).eql(3);
-        expect(content[0].message.messageToLog).to.eql('Info log');
+        expect(content[0].message.payload).to.eql('Info log');
         expect(content[0].message.objectType).to.eql('string');
         expect(content[0].level).to.eql('info');
 
-        expect(content[1].message.messageToLog).to.eql(
-            'Error message'
-        );
+        expect(content[1].message.payload).to.eql('Error message');
         expect(content[1].message.objectType).to.eql('error');
         expect(content[1].level).to.eql('error');
 
-        expect(content[2].message.messageToLog).to.eql(
+        expect(content[2].message.payload).to.eql(
             '["new","warning","message"]'
         );
         expect(content[2].message.objectType).to.eql('array');

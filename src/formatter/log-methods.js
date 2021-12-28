@@ -15,9 +15,7 @@ const isNumeric = (value) => /^-?\d+$/.test(value);
  * @returns {number|*}
  */
 const getSpaceArgument = (logPretty) => {
-    return isNumeric(logPretty)
-        ? Number(logPretty)
-        : logPretty;
+    return isNumeric(logPretty) ? Number(logPretty) : logPretty;
 };
 
 /**
@@ -27,9 +25,7 @@ const getSpaceArgument = (logPretty) => {
  */
 const isEmptyWraper = (value) => {
     let typeofValue = typeof value;
-    return isEqual(typeofValue, 'number')
-        ? !value
-        : isEmpty(value);
+    return isEqual(typeofValue, 'number') ? !value : isEmpty(value);
 };
 
 /**
