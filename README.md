@@ -1,4 +1,4 @@
-# Overwrite System Logs
+# Overwrite System Logs for New Relic
 Library with functionality that overwrites all console methods to give a more precise format. Configuration based on winston dependency.
 
 ## How to use
@@ -13,7 +13,7 @@ overwrite-system-logs-tests
 
 ```js
 // src/index.js
-require('overwrite-system-logs').overwriteSystemLogs();
+require('overwrite-system-logs-newrelic').overwriteSystemLogsNewRelic();
 
 const logsTest = () => {
     const helloWorld = 'hello world from overwrite-system-logs';
@@ -26,9 +26,9 @@ logsTest();
 
 ```ts
 // src/index.ts
-import { overwriteSystemLogs } from 'overwrite-system-logs';
+import { overwriteSystemLogsNewRelic } from 'overwrite-system-logs-newrelic';
 
-overwriteSystemLogs();
+overwriteSystemLogsNewRelic();
 
 const logsTest = (): void => {
     const helloWorld: string = 'hello world from overwrite-system-logs';

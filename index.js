@@ -3,5 +3,5 @@ const { Logger } = require('./src/core/logger-wrapper');
 
 module.exports = {
     logger: new Logger(),
-    overwriteSystemLogs
+    overwriteSystemLogsNewRelic: overwriteSystemLogs
 };
