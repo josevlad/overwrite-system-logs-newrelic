@@ -15,4 +15,4 @@ export class LoggerWrapper{
 }
 
 export declare const logger : LoggerWrapper;
-export declare function overwriteSystemLogs(): void;
+export declare function overwriteSystemLogsNewRelic(): void;
